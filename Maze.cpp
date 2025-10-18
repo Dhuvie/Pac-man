@@ -76,6 +76,17 @@ void Maze::InitializeMaze()
         }
     }
     
+    // CLEAR BOTTOM-LEFT CORNER for safe starting area
+    for (int y = 26; y <= 29; y++)
+    {
+        for (int x = 1; x <= 4; x++)
+        {
+            tiles[x][y] = EMPTY; // Force clear area
+            dots[x][y] = false;
+            powerPellets[x][y] = false;
+        }
+    }
+    
     dotsEaten = 0;
 }
 

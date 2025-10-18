@@ -27,6 +27,8 @@ public:
     void RemoveDot(int x, int y);
     void RemovePowerPellet(int x, int y);
     bool AllDotsEaten() const;
+    int GetTotalDots() const { return totalDots; }
+    int GetDotsEaten() const { return dotsEaten; }
     
     glm::vec2 GridToWorld(int x, int y) const;
     

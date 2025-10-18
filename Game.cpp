@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <algorithm>
+#include <cstdio>
 
 Game::Game(unsigned int width, unsigned int height)
     : State(GAME_MENU), Keys(), Width(width), Height(height),
@@ -39,8 +40,8 @@ void Game::Init()
     // Initialize maze
     maze = std::make_unique<Maze>();
     
-    // Initialize player - GUARANTEED WALKABLE POSITION (row 29 is ALL dots)
-    player = std::make_unique<Player>(glm::vec2(13.0f, 29.0f));
+    // Initialize player - CLEARED CORNER (guaranteed safe)
+    player = std::make_unique<Player>(glm::vec2(2.5f, 27.5f));
     
     // Initialize ghosts with different AI behaviors - PERFECT positions
     ghosts.push_back(std::make_unique<Ghost>(glm::vec2(13.5f, 11.0f), 
@@ -131,16 +132,33 @@ void Game::Update(float dt)
     // Update player
     player->Update(dt, maze.get());
     
-    // Check dot collection
-    glm::ivec2 gridPos = player->GetGridPosition();
-    if (maze->HasDot(gridPos.x, gridPos.y))
+    // Check dot collection with LARGER radius for easier eating
+    glm::vec2 playerPos = player->GetPosition();
+    
+    // Check a 3x3 grid around player for dots (more forgiving)
+    for (int dx = -1; dx <= 1; dx++)
     {
-        EatDot(gridPos.x, gridPos.y);
-    }
-    if (maze->HasPowerPellet(gridPos.x, gridPos.y))
-    {
-        EatPowerPellet();
-        maze->RemovePowerPellet(gridPos.x, gridPos.y);
+        for (int dy = -1; dy <= 1; dy++)
+        {
+            int checkX = (int)std::round(playerPos.x) + dx;
+            int checkY = (int)std::round(playerPos.y) + dy;
+            
+            // Check if player is close enough to this dot
+            float distance = glm::distance(playerPos, glm::vec2(checkX + 0.5f, checkY + 0.5f));
+            
+            if (distance < 0.7f) // More forgiving distance
+            {
+                if (maze->HasDot(checkX, checkY))
+                {
+                    EatDot(checkX, checkY);
+                }
+                if (maze->HasPowerPellet(checkX, checkY))
+                {
+                    EatPowerPellet();
+                    maze->RemovePowerPellet(checkX, checkY);
+                }
+            }
+        }
     }
     
     // Release ghosts over time
@@ -205,9 +223,6 @@ void Game::Render()
             1.0f, glm::vec3(0.0f, 1.0f, 1.0f));
         renderer->DrawText("Press ENTER to Start", glm::vec2(Width / 2 - 140, Height / 2 + 50), 
             1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
-        renderer->DrawText("HIGH SCORE: " + std::to_string(HighScore), 
-            glm::vec2(Width / 2 - 120, Height / 2 + 100), 
-            1.0f, glm::vec3(1.0f, 0.5f, 0.0f));
         return;
     }
     
@@ -227,13 +242,9 @@ void Game::Render()
             ghost->Render(renderer.get(), powerUpActive);
     }
     
-    // Render UI
-    renderer->DrawText("SCORE: " + std::to_string(Score), 
-        glm::vec2(20, 30), 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
-    renderer->DrawText("HIGH: " + std::to_string(HighScore), 
-        glm::vec2(Width - 200, 30), 1.0f, glm::vec3(1.0f, 1.0f, 0.0f));
-    renderer->DrawText("LEVEL: " + std::to_string(Level), 
-        glm::vec2(Width / 2 - 50, 30), 1.0f, glm::vec3(0.0f, 1.0f, 1.0f));
+    // Simple UI - just show level
+    renderer->DrawText("LEVEL " + std::to_string(Level), 
+        glm::vec2(Width / 2 - 50, Height - 50), 1.5f, glm::vec3(1.0f, 1.0f, 1.0f)); // CENTER, WHITE
     
     // Render lives
     for (int i = 0; i < Lives; i++)
@@ -272,7 +283,7 @@ void Game::Reset()
     ghostsEaten = 0;
     
     maze->Reset();
-    player->Reset(glm::vec2(13.0f, 29.0f));
+    player->Reset(glm::vec2(2.5f, 27.5f));
     
     ghosts[0]->Reset(glm::vec2(13.5f, 11.0f));
     ghosts[1]->Reset(glm::vec2(11.5f, 14.0f));
@@ -293,7 +304,7 @@ void Game::NextLevel()
     ghostsEaten = 0;
     
     maze->Reset();
-    player->Reset(glm::vec2(13.0f, 29.0f));
+    player->Reset(glm::vec2(2.5f, 27.5f));
     
     ghosts[0]->Reset(glm::vec2(13.5f, 11.0f));
     ghosts[1]->Reset(glm::vec2(11.5f, 14.0f));
@@ -310,13 +321,6 @@ void Game::NextLevel()
 void Game::EatDot(int x, int y)
 {
     maze->RemoveDot(x, y);
-    Score += 10;
-    
-    if (Score > HighScore)
-    {
-        HighScore = Score;
-        SaveHighScore();
-    }
     
     // Spawn particles
     glm::vec2 worldPos = maze->GridToWorld(x, y);
@@ -325,7 +329,6 @@ void Game::EatDot(int x, int y)
 
 void Game::EatPowerPellet()
 {
-    Score += 50;
     powerUpActive = true;
     powerUpTimer = 8.0f;
     ghostsEaten = 0;
@@ -345,15 +348,6 @@ void Game::EatPowerPellet()
 void Game::EatGhost(Ghost* ghost)
 {
     ghostsEaten++;
-    int points = 200 * (1 << (ghostsEaten - 1)); // 200, 400, 800, 1600
-    Score += points;
-    
-    if (Score > HighScore)
-    {
-        HighScore = Score;
-        SaveHighScore();
-    }
-    
     ghost->SetEaten(true);
     
     // Spawn particles
@@ -373,7 +367,7 @@ void Game::LoseLife()
     else
     {
         // Reset positions
-        player->Reset(glm::vec2(13.0f, 29.0f));
+        player->Reset(glm::vec2(2.5f, 27.5f));
         
         ghosts[0]->Reset(glm::vec2(13.5f, 11.0f));
         ghosts[1]->Reset(glm::vec2(11.5f, 14.0f));

@@ -1,40 +1,91 @@
-# 🟡 Pac-Man Game
+# 🟡 PAC-MAN: World Class Edition
 
-A **modern, high-performance** implementation of the classic Pac-Man arcade game built with **C++** and **OpenGL**.
+> **A modern, high-performance C++ implementation of the classic Pac-Man arcade game with advanced AI and stunning OpenGL graphics.**
 
-![Pac-Man Game](https://img.shields.io/badge/Game-Pac--Man-yellow?style=for-the-badge&logo=game)
-![C++](https://img.shields.io/badge/C++-17-blue?style=for-the-badge&logo=cplusplus)
-![OpenGL](https://img.shields.io/badge/OpenGL-3.3+-green?style=for-the-badge&logo=opengl)
-![CMake](https://img.shields.io/badge/CMake-3.10+-red?style=for-the-badge&logo=cmake)
+![C++](https://img.shields.io/badge/C++-17-blue?style=flat-square&logo=cplusplus)
+![OpenGL](https://img.shields.io/badge/OpenGL-3.3+-green?style=flat-square&logo=opengl)
+![CMake](https://img.shields.io/badge/CMake-3.10+-red?style=flat-square&logo=cmake)
+![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey?style=flat-square)
+![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
 
-## 🎮 Features
+---
 
-### 🎯 **Core Gameplay**
-- **Classic Pac-Man Experience**: Authentic maze navigation, dot collection, and ghost avoidance
-- **Perfect Collision Detection**: Bulletproof wall collision system - no glitches or wall penetration
-- **Smooth Movement**: Responsive controls with precise grid-based movement
-- **Power Pellets**: Turn the tables on ghosts with temporary invincibility
+## ✨ Features
+
+### 🎮 **Classic Gameplay**
+- **Authentic Pac-Man Experience** - Navigate mazes, collect dots, avoid ghosts
+- **Perfect Collision Detection** - Bulletproof wall collision system
+- **Smart Movement Controls** - Intelligent direction changes prevent getting stuck
+- **Power Pellets** - Turn the tables and chase the ghosts!
 
 ### 👻 **Advanced Ghost AI**
 - **4 Unique Ghost Personalities**:
-  - 🔴 **Blinky (Red)**: Aggressive direct pursuit
-  - 🩷 **Pinky (Pink)**: Strategic ambush tactics  
-  - 🩵 **Inky (Cyan)**: Complex patrol patterns
-  - 🧡 **Clyde (Orange)**: Unpredictable behavior switching
-- **Multiple Pathfinding Algorithms**: Dijkstra, A*, and Backtracking
-- **Dynamic Difficulty**: AI becomes more aggressive as levels progress
+  - 🔴 **Blinky (Red)** - Aggressive direct pursuit
+  - 🩷 **Pinky (Pink)** - Strategic ambush tactics
+  - 🩵 **Inky (Cyan)** - Complex patrol patterns
+  - 🧡 **Clyde (Orange)** - Unpredictable behavior
+- **Multiple Pathfinding Algorithms** - Dijkstra, A*, and Backtracking
+- **Dynamic AI** - Ghosts adapt to your playstyle
 
 ### 🎨 **Visual Excellence**
-- **OpenGL-Powered Graphics**: Hardware-accelerated rendering
-- **Particle Effects**: Visual flair for enhanced gameplay experience
-- **Smooth Animations**: 60 FPS gameplay with fluid character movement
-- **Classic Aesthetic**: Faithful to the original Pac-Man design
+- **OpenGL-Powered Graphics** - Hardware-accelerated rendering
+- **Particle Effects** - Beautiful visual feedback for game events
+- **Smooth 60 FPS Gameplay** - Fluid character animations
+- **Classic Aesthetic** - Faithful to the original Pac-Man design
 
-### 🏆 **Game Systems**
-- **Progressive Difficulty**: Increasingly challenging levels
-- **High Score Tracking**: Persistent leaderboard system
-- **Multiple Game States**: Menu, gameplay, game over, and pause
-- **Sound-Ready Architecture**: Prepared for audio integration
+### 🏆 **Game Features**
+- **Progressive Difficulty** - Increasingly challenging levels
+- **Multiple Lives System** - Visual life indicators
+- **Power-Up Mechanics** - Temporary ghost vulnerability
+- **Level Progression** - Complete mazes to advance
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- **C++17** compatible compiler (MSVC, GCC, Clang)
+- **CMake 3.10+**
+- **OpenGL 3.3+**
+- **GLFW3** and **GLEW** libraries
+
+### Build Instructions
+
+#### Windows
+```cmd
+# Clone the repository
+git clone https://github.com/Dhuvie/Pac-man.git
+cd Pac-man
+
+# Build using the provided script
+build.bat
+
+# Or build manually
+mkdir build && cd build
+cmake ..
+cmake --build . --config Release
+
+# Run the game
+cd Release
+Pacman.exe
+```
+
+#### Linux/Mac
+```bash
+# Clone the repository
+git clone https://github.com/Dhuvie/Pac-man.git
+cd Pac-man
+
+# Build the project
+mkdir build && cd build
+cmake ..
+make
+
+# Run the game
+./Pacman
+```
+
+---
 
 ## 🎮 Controls
 
@@ -45,8 +96,11 @@ A **modern, high-performance** implementation of the classic Pac-Man arcade game
 | **Pause** | `P` |
 | **Exit** | `Escape` |
 
-## 🚀 Quick Start
+---
 
+<<<<<<< HEAD
+## 🏗️ Project Structure
+=======
 ### Prerequisites
 - **C++17** compatible compiler (MSVC, GCC, Clang)
 - **CMake 3.10+**
@@ -57,7 +111,7 @@ A **modern, high-performance** implementation of the classic Pac-Man arcade game
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/Pac-man.git
+git clone https://github.com/Dhuvie/Pac-man.git
 cd Pac-man
 
 # Build the project
@@ -124,16 +178,57 @@ build.bat
 - **🔄 Cross-Platform**: CMake build system
 
 ## 📁 Project Structure
+>>>>>>> 9bd27b4ec3627c20467de5113b081563d34b0384
 
 ```
 Pac-man/
-├── 📄 Source Files (.cpp/.h)
-├── 📁 shaders/          # OpenGL shaders
-├── 📁 build/            # Build output
-├── 🔧 CMakeLists.txt    # Build configuration
-├── 🚀 build.bat         # Windows build script
-└── 📖 README.md         # This file
+├── 📄 Game.cpp/h          # Main game loop & state management
+├── 🟡 Player.cpp/h        # Pac-Man character & controls
+├── 👻 Ghost.cpp/h         # AI behaviors & pathfinding
+├── 🧱 Maze.cpp/h          # Level layout & collision detection
+├── 🎨 Renderer.cpp/h      # OpenGL rendering system
+├── ✨ ParticleSystem.cpp/h # Visual effects engine
+├── 📦 ResourceManager.cpp/h # Asset management
+├── 🔧 Shader.cpp/h        # OpenGL shader handling
+├── 📁 shaders/           # GLSL shader files
+├── 🔧 CMakeLists.txt     # Build configuration
+└── 📖 README.md          # This file
 ```
+
+---
+
+## 🎯 Game Mechanics
+
+### 👻 Ghost Behavior
+
+| Ghost | Color | AI Type | Strategy |
+|-------|-------|---------|----------|
+| **Blinky** | 🔴 Red | Aggressive | Direct chase using shortest path |
+| **Pinky** | 🩷 Pink | Ambush | Predicts player movement |
+| **Inky** | 🩵 Cyan | Patrol | Complex positioning algorithm |
+| **Clyde** | 🧡 Orange | Random | Unpredictable movement patterns |
+
+### 🎮 Gameplay Tips
+- **Collect all dots** to advance to the next level
+- **Eat power pellets** to temporarily make ghosts vulnerable
+- **Plan your route** - ghosts use advanced AI to corner you
+- **Use corners wisely** - perfect for evading ghosts
+- **Watch ghost patterns** - each has unique behavior
+
+---
+
+## 🛠️ Technical Highlights
+
+- **🔧 Modern C++17** - Clean, object-oriented architecture
+- **⚡ High Performance** - Optimized rendering and game logic
+- **🎯 Bulletproof Collision** - 5-point collision detection system
+- **🧠 Advanced AI** - Multiple pathfinding algorithms (Dijkstra, A*, Backtracking)
+- **🎨 Visual Effects** - Particle systems for enhanced gameplay
+- **📦 Resource Management** - Efficient asset loading and caching
+- **🔄 Cross-Platform** - CMake build system for portability
+
+---
+
 
 ## 🤝 Contributing
 
@@ -153,16 +248,30 @@ Contributions are **welcome**! Here's how you can help:
 - Suggest new features via **Issues**
 - Describe the **use case** and **expected behavior**
 
+---
+
 ## 📜 License
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
+---
+
 ## 🙏 Acknowledgments
 
-- 🎮 **Namco** - Original Pac-Man creators
+- 🎮 **Namco** - Original Pac-Man creators (1980)
 - 🛠️ **OpenGL Community** - Graphics libraries and documentation
 - 💻 **C++ Community** - Modern C++ best practices
 - 🎨 **Game Development Community** - Inspiration and techniques
+
+---
+
+## 📊 Project Stats
+
+- **Language**: C++17
+- **Graphics**: OpenGL 3.3+
+- **Build System**: CMake
+- **Lines of Code**: ~3000+
+- **Development Time**: Intensive optimization and polish
 
 ---
 
@@ -170,6 +279,8 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 **⭐ Star this repository if you enjoyed the game! ⭐**
 
-Made with ❤️ and lots of ☕
+**Made with ❤️ and lots of ☕**
+
+[Report Bug](https://github.com/Dhuvie/Pac-man/issues) · [Request Feature](https://github.com/Dhuvie/Pac-man/issues)
 
 </div>

@@ -51,16 +51,34 @@ Makefile
 *.user
 *.userosscache
 *.sln.docstates
-# High score data
-highscore.dat
 
-# IDE
-.vscode/
-.idea/
+# Temporary files
+*.tmp
+*.temp
+*.log
 *.swp
 *.swo
 *~
 
-# OS
+# OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.cbp
+*.depend
+*.layout
+
+# Game data
+highscore.dat
+
+# Package managers
+vcpkg_installed/
+packages/

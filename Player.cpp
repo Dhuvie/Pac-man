@@ -10,35 +10,84 @@ Player::Player(glm::vec2 startPos)
 
 void Player::Update(float dt, Maze* maze)
 {
-    // SIMPLE direction change
+    // SMART direction change - only turn if the new direction is actually walkable
     if (glm::length(desiredDirection) > 0.0f && desiredDirection != direction)
     {
-        glm::vec2 testPos = position + desiredDirection * 0.5f;
-        int testX = (int)testPos.x;
-        int testY = (int)testPos.y;
+        // Check if we can actually move in the desired direction
+        glm::vec2 testPos = position + desiredDirection * 0.8f;
+        bool canTurn = true;
+        float checkRadius = 0.4f;
         
-        if (testX >= 0 && testX < 28 && testY >= 0 && testY < 31 &&
-            maze->IsWalkable(testX, testY))
+        // Check multiple points to ensure the turn is safe
+        glm::vec2 checkPoints[] = {
+            testPos, // center
+            testPos + glm::vec2(-checkRadius, -checkRadius), // corners
+            testPos + glm::vec2(checkRadius, -checkRadius),
+            testPos + glm::vec2(-checkRadius, checkRadius),
+            testPos + glm::vec2(checkRadius, checkRadius)
+        };
+        
+        for (const auto& point : checkPoints)
+        {
+            int gridX = (int)std::floor(point.x);
+            int gridY = (int)std::floor(point.y);
+            
+            if (gridX < 0 || gridX >= 28 || gridY < 0 || gridY >= 31 ||
+                !maze->IsWalkable(gridX, gridY))
+            {
+                canTurn = false;
+                break;
+            }
+        }
+        
+        // Only change direction if the turn is completely safe
+        if (canTurn)
         {
             direction = desiredDirection;
         }
+        // If can't turn, keep current direction - no freezing!
     }
     
-    // SIMPLE movement with SOLID collision
+    // BULLETPROOF movement with SOLID collision
     if (glm::length(direction) > 0.0f)
     {
         glm::vec2 movement = direction * speed * dt;
         glm::vec2 newPos = position + movement;
         
-        // Check the grid position we're moving to
-        int gridX = (int)newPos.x;
-        int gridY = (int)newPos.y;
+        // Check multiple points around Pac-Man to prevent wall penetration
+        bool canMove = true;
+        float checkRadius = 0.4f;
         
-        // Only move if the destination is walkable
-        if (gridX >= 0 && gridX < 28 && gridY >= 0 && gridY < 31 &&
-            maze->IsWalkable(gridX, gridY))
+        // Check center and 4 corners
+        glm::vec2 checkPoints[] = {
+            newPos, // center
+            newPos + glm::vec2(-checkRadius, -checkRadius), // top-left
+            newPos + glm::vec2(checkRadius, -checkRadius),  // top-right
+            newPos + glm::vec2(-checkRadius, checkRadius),  // bottom-left
+            newPos + glm::vec2(checkRadius, checkRadius)    // bottom-right
+        };
+        
+        for (const auto& point : checkPoints)
+        {
+            int gridX = (int)std::floor(point.x);
+            int gridY = (int)std::floor(point.y);
+            
+            if (gridX < 0 || gridX >= 28 || gridY < 0 || gridY >= 31 ||
+                !maze->IsWalkable(gridX, gridY))
+            {
+                canMove = false;
+                break;
+            }
+        }
+        
+        if (canMove)
         {
             position = newPos;
+        }
+        else
+        {
+            // If can't move forward, stop moving to prevent getting stuck
+            direction = glm::vec2(0.0f, 0.0f);
         }
     }
     
@@ -101,5 +150,6 @@ void Player::Reset(glm::vec2 pos)
 
 glm::ivec2 Player::GetGridPosition() const
 {
-    return glm::ivec2(position);
+    // Round to nearest grid position for accurate dot collection
+    return glm::ivec2(std::round(position.x), std::round(position.y));
 }
