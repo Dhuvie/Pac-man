@@ -57,7 +57,7 @@ A **modern, high-performance** implementation of the classic Pac-Man arcade game
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/Pac-man.git
+git clone https://github.com/Dhuvie/Pac-man.git
 cd Pac-man
 
 # Build the project
